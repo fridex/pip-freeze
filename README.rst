@@ -104,7 +104,11 @@ output is missing some packages:
 A: You most probably don't have pip with `PEP-710 support
 <https://peps.python.org/pep-0710/>`__. Please install pip with PEP-710
 support, for example using `this patch
-<https://github.com/pypa/pip/pull/11865>`__).
+<https://github.com/pypa/pip/pull/11865>`__ (experimental):
+
+.. code-block::
+
+  pip install git+https://github.com/fridex/pip.git@provenance-url
 
 License
 =======
