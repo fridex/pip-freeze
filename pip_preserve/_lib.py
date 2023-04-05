@@ -32,10 +32,14 @@ def _get_preamble() -> str:
     from pip_preserve import __version__
     from pip_preserve import __title__
 
-    return _PREAMBLE_TEMPLATE.format(title=__title__, version=__version__, python_version=platform.python_version())
+    return _PREAMBLE_TEMPLATE.format(
+        title=__title__, version=__version__, python_version=platform.python_version()
+    )
 
 
-def _load_url_files(dist_info_dir: str, *, raise_on_error: bool = True) -> Optional[Tuple[str, str, Dict[str, Any]]]:
+def _load_url_files(
+    dist_info_dir: str, *, raise_on_error: bool = True
+) -> Optional[Tuple[str, str, Dict[str, Any]]]:
     """Load provenance_url.json file or direct_url.json file from the specified dist-info directory."""
     if not os.path.isdir(dist_info_dir):
         raise ValueError(f"Path {dist_info_dir!r} does not exist or is not a directory")
@@ -77,7 +81,9 @@ def _load_url_files(dist_info_dir: str, *, raise_on_error: bool = True) -> Optio
     # provenance_url.json
     provenance_url_path = os.path.join(dist_info_dir, "provenance_url.json")
     if not os.path.isfile(provenance_url_path):
-        _LOGGER.debug("No provenance_url.json found in %r, trying direct_url.json", dist_info_dir)
+        _LOGGER.debug(
+            "No provenance_url.json found in %r, trying direct_url.json", dist_info_dir
+        )
 
         direct_url_path = os.path.join(dist_info_dir, "direct_url.json")
         if os.path.isfile(direct_url_path):
@@ -115,7 +121,9 @@ def _get_hashes(hashes: Dict[str, str]) -> str:
     return result
 
 
-def _get_indexes(distributions_info: List[Tuple[str, str, Dict[str, Any]]]) -> List[str]:
+def _get_indexes(
+    distributions_info: List[Tuple[str, str, Dict[str, Any]]]
+) -> List[str]:
     """Generate requirements.txt with index configuration."""
     index_urls: Set[str] = set()
     for name, version, entry in distributions_info:
@@ -195,30 +203,44 @@ def _print_direct_url(name: str, version: str, entry: Dict[str, Any]) -> str:
 
         return result + url + "\n"
     elif "dir_info" in entry:
-        _LOGGER.debug("Package %r in version %r is installed from a directory", name, version)
+        _LOGGER.debug(
+            "Package %r in version %r is installed from a directory", name, version
+        )
         if entry["dir_info"].get("editable", False):
             return result + f"-e {entry['url']}" + "\n"
         else:
             return result + entry["url"] + "\n"
     elif "archive_info" in entry:
-        _LOGGER.debug("Pacakge %r in version %r is installed using a direct URL")
+        _LOGGER.debug(
+            "Pacakge %r in version %r is installed using a direct URL", name, version
+        )
         return result + _print_archive_info(entry)
     else:
         raise NotImplementedError(f"Unknown direct_url.json content: {entry!r}")
 
 
-def _print_reqs(name: str, version: str, entry: Dict[str, Any], *, direct_url: bool = False) -> str:
+def _print_reqs(
+    name: str, version: str, entry: Dict[str, Any], *, direct_url: bool = False
+) -> str:
     """Output requirement for the given direct_url.json/provenance_url.json file."""
     result = ""
     if direct_url:
         if entry.get(_IS_PROVENANCE_KEY, False):
-            _LOGGER.debug("Package %r in version %r is installed using its name and a version specifier")
+            _LOGGER.debug(
+                "Package %r in version %r is installed using its name and a version specifier",
+                name,
+                version,
+            )
             result += _print_archive_info(entry)
         else:
             result += _print_direct_url(name, version, entry)
     else:
         if entry.get(_IS_PROVENANCE_KEY, False):
-            _LOGGER.debug("Package %r in version %r is installed using its name and a version specifier")
+            _LOGGER.debug(
+                "Package %r in version %r is installed using its name and a version specifier",
+                name,
+                version,
+            )
 
             req = f"{name}=={version}"
             hashes = _get_hashes(entry["archive_info"]["hashes"])
@@ -231,7 +253,9 @@ def _print_reqs(name: str, version: str, entry: Dict[str, Any], *, direct_url: b
     return result
 
 
-def preserve_requirements(site_packages: List[str], *, ignore_errors: bool, direct_url: bool) -> Optional[str]:
+def preserve_requirements(
+    site_packages: List[str], *, ignore_errors: bool, direct_url: bool
+) -> Optional[str]:
     """Output installed Python packages in requirements format, including also hashes of Python packages."""
     distributions_info: List[Tuple[str, str, Dict[str, Any]]] = []
     for site_packages_item in site_packages:

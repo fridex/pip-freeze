@@ -43,7 +43,9 @@ daiquiri.setup(level=logging.INFO)
     is_flag=True,
     help="Print version and exit.",
 )
-def cli(site_packages: str, debug: bool, ignore_errors: bool, direct_url: bool, version: str) -> None:
+def cli(
+    site_packages: str, debug: bool, ignore_errors: bool, direct_url: bool, version: str
+) -> None:
     """Reconstruct requirements from site-packages."""
     from ._lib import preserve_requirements
     from pip_preserve import __title__
@@ -60,9 +62,7 @@ def cli(site_packages: str, debug: bool, ignore_errors: bool, direct_url: bool, 
     site_packages_listing = site_packages.split(os.pathsep)
 
     requirements = preserve_requirements(
-        site_packages_listing,
-        ignore_errors=ignore_errors,
-        direct_url=direct_url
+        site_packages_listing, ignore_errors=ignore_errors, direct_url=direct_url
     )
     if requirements is None:
         sys.exit(1)
