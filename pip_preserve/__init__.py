@@ -4,7 +4,7 @@
 
 from ._lib import preserve_requirements
 
-__version__ = "0.0.2"
+__version__ = "0.0.2.post1"
 __author__ = "Fridolin Pokorny <fridolin.pokorny@gmail.com>"
 __license__ = "BSD-3-Clause"
 __title__ = "pip-preserve"
