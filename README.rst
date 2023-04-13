@@ -5,7 +5,7 @@ Output installed Python packages in requirements format, including also hashes o
 
 .. note::
 
-  Note this tool requires pip with `PEP-710 <https://peps.python.org/pep-0710/>`__ support which is a draft PEP as of today. See [this article](https://dev.to/fridex/how-to-get-information-about-the-provenance-of-python-packages-installed-4f65) and the FAQ section bellow.
+  Note this tool requires pip with `PEP-710 <https://peps.python.org/pep-0710/>`__ support which is a draft PEP as of today. See `this article <https://dev.to/fridex/how-to-get-information-about-the-provenance-of-python-packages-installed-4f65>`__ and the FAQ section bellow.
 
 Installation
 ============
